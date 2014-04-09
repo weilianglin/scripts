@@ -1,0 +1,2 @@
+#./sunspider --shell=$1 --args="--expose-gc --dump_counters --native_code_counters" --suite=sunspider-1.0.2
+./sunspider --shell=$1 --args="--expose-gc" --suite=sunspider-1.0.2

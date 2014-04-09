@@ -1,0 +1,65 @@
+#!/bin/bash
+if [ $# -lt 3 ];then
+    adb devices
+    echo "./run device browsertype benchmark"
+    exit -1
+fi
+device=$1
+browser=$2
+benchmark=$3
+
+CMD="adb -s $device shell am start -a android.intent.action.MAIN -n "
+if [ $browser = "chrome" ];then
+    browser="com.android.chrome/com.google.android.apps.chrome.Main"
+elif [ $browser = "beta" ];then
+    browser="com.chrome.beta/com.google.android.apps.chrome.Main"
+elif [ $browser = "content" ]; then
+    browser="org.chromium.content_shell_apk/.ContentShellActivity" 
+elif [ $browser = "stock" ]; then
+    browser="com.android.browser/.BrowserActivity" 
+else
+    echo "unspport browser type $browser"
+    exit -1
+fi
+
+if [ $benchmark = "sunspider" ]; then
+    #link="http://192.168.1.104/auto/sunspider-0.9.1/driver.html"
+    #link="http://www.webkit.org/perf/sunspider-1.0.2/sunspider-1.0.2/driver.html"
+    #link="http://www.webkit.org/perf/sunspider-0.9.1/sunspider-0.9.1/driver.html"
+    #link="file:///sdcard/tmp/sunspider/driver.html"
+    #link="http://192.168.1.100/auto/sunspider/sunspider-0.9.1/driver.html"
+    link="http://192.168.1.101/auto/hosted-wl/sunspider-1.0.2/driver.html"
+    #link="http://192.168.1.101/auto/sunspider/sunspider-0.9.1/driver.html"
+elif [ $benchmark = "octane1.0" ]; then
+    link="http://192.168.1.101/auto/octane/index.html"
+elif [ $benchmark = "octane" ]; then
+    #link="http://192.168.1.101/auto/octane/index.html"
+    link="http://192.168.1.101/auto/octane2.0/index.html"
+    #link="http://octane-benchmark.googlecode.com/svn/tags/v1/index.html"
+elif [ $benchmark = "browsermark" ]; then
+    #link="http://192.168.1.113:8080/browsermark"
+    link="http://browsermark.local"
+    #link='http://intel:475879@browsermark-corporate.rightware.com'
+elif [ $benchmark = "webxprt" ]; then
+    link="http://192.168.1.102/webxprt/login.php"
+    #link="http://192.168.1.101/v1dot01/login.php"
+elif [ $benchmark = "dom" ]; then
+    link="http://intel:475879@browsermark-corporate.rightware.com?select=/tests/benchmarks/dom/create_source"
+elif [ $benchmark = "kraken" ]; then
+    link="http://192.168.1.101/auto/kraken/hosted/kraken-1.1/driver.html"
+elif [ $benchmark = "dromaeo" ]; then
+    link="http://dromaeo.com"
+elif [ $benchmark = "sunspider-0.9.1" ]; then
+    link="http://192.168.1.101/auto/sunspider/sunspider-0.9.1/driver.html"
+else
+    echo "unspport benchmark $benchmark"
+    exit -1
+fi
+CMD="$CMD $browser -d $link"
+echo $CMD
+$CMD
+
+#http://intel:475879@browsermark-corporate.rightware.com?select=/tests/benchmarks/dom 
+#http://intel:475879@browsermark-corporate.rightware.com?select=/tests/benchmarks/dom/advanced_search 
+#http://intel:475879@browsermark-corporate.rightware.com?select=/tests/benchmarks/dom/create_source 
+#http://intel:475879@browsermark-corporate.rightware.com?select=/tests/benchmarks/dom/dynamic_create 

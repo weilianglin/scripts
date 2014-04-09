@@ -1,0 +1,6 @@
+#!/bin/bash
+if [ $# -lt 2 ]; then
+    echo "./buildv8 ia32.release on/off"
+    exit -1
+fi
+make $1 snapshot=$2 disassembler=on -j4 i18nsupport=on

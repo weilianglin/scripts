@@ -1,0 +1,2 @@
+#./sunspider --shell=$1 --args="--expose-gc --dump_counters --native_code_counters" --suite=kraken-1.1 
+./sunspider --shell=$1 --args="--expose-gc" --suite=kraken-1.1 

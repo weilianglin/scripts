@@ -1,0 +1,1 @@
+make -j8 $1.check snapshot=$2 disassembler=on i18nsupport=off | tee test-$1.log

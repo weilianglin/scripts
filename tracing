@@ -1,0 +1,48 @@
+#!/bin/bash
+# after tracing, you can get the result as below
+#   adb pull /sdcard/trace.txt
+# and then analyze it on local chrome about:tracing
+#You can instrument javascript code as well:
+#function Foo() {
+#  console.time("animation_yaojie");
+#  var now = Date.now();
+#  while (Date.now() < now + 1000);
+#  console.timeEnd("animation_yaojie");
+#}
+#
+#
+
+if [ $# -lt 3 ];then
+  adb devices
+  echo "tracing device content/chrome start/stop"
+  exit
+fi
+
+
+if [ $2 = "chrome" ]; then
+  if [ $3 = "start" ];then
+    adb -s $1 shell am broadcast -a com.android.chrome.GPU_PROFILER_START -e file /sdcard/trace.txt
+  else
+    adb -s $1 shell am broadcast -a com.android.chrome.GPU_PROFILER_STOP
+  fi
+elif [ $2 = "beta" ];then
+  if [ $3 = "start" ];then
+    adb -s $1 shell am broadcast -a com.chrome.beta.GPU_PROFILER_START -e file /sdcard/trace.txt
+  else
+    adb -s $1 shell am broadcast -a com.chrome.beta.GPU_PROFILER_STOP
+  fi
+elif [ $2 = "content" ];then 
+  if [ $3 = "start" ];then
+    adb -s $1 shell am broadcast -a org.chromium.content_shell.action.PROFILE_START -e file /sdcard/trace.txt
+  else
+    adb -s $1 shell am broadcast -a org.chromium.content_shell.action.PROFILE_STOP
+  fi
+else
+  echo "unsupported browser for tracing!"
+fi
+
+
+if [ $? -ne 0 ]; then
+    echo "fail to tracing"
+fi
+
